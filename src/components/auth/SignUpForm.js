@@ -29,9 +29,9 @@ class SignUpForm extends Component {
 
   handleChange = (e) => {
     const self = this;
-    const { id, value } = e.target;
+    const { name, value } = e.target;
 
-    self.setState({ ...self.state, [id]: value })
+    self.setState({ ...self.state, [name]: value })
   }
 
   hasErrors = (fieldsError) =>
@@ -75,6 +75,7 @@ class SignUpForm extends Component {
                 <Input
                   prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                   id="email"
+                  name="email"
                   placeholder="Email"
                   onChange={self.handleChange}
                   autoComplete="false"
@@ -96,6 +97,7 @@ class SignUpForm extends Component {
                 <Input
                   prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                   id="password"
+                  name="password"
                   type="password"
                   placeholder="Password"
                   onChange={self.handleChange}
@@ -120,6 +122,7 @@ class SignUpForm extends Component {
                 <Input
                   prefix={<Icon type="solution" style={{ color: 'rgba(0,0,0,.25)' }} />}
                   id="firstName"
+                  name="firstName"
                   type="text"
                   placeholder="First Name"
                   onChange={self.handleChange}
@@ -142,6 +145,7 @@ class SignUpForm extends Component {
                 <Input
                   prefix={<Icon type="solution" style={{ color: 'rgba(0,0,0,.25)' }} />}
                   id="lastName"
+                  name="lastName"
                   type="text"
                   placeholder="Last Name"
                   onChange={self.handleChange}

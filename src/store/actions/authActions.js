@@ -30,11 +30,10 @@ export const signUp = (user) => {
     // make async call to database
     const firebase = getFirebase();
     const firestore = getFirestore();
-    const credentials = { email: user.email, password: user.password, };
 
     return firebase
       .auth()
-      .createUserWithEmailAndPassword(credentials)
+      .createUserWithEmailAndPassword(user.email, user.password)
       .then((response) => {
         return firestore
           .collection('users')
