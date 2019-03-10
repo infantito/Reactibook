@@ -4,10 +4,12 @@ import Card from 'antd/es/card';
 import Form from 'antd/es/form';
 import FormItem from 'antd/es/form/FormItem';
 import Select from 'antd/es/select';
-import TextArea from 'antd/es/input/TextArea';
+
+import TextArea from './TextArea';
+// import logo from '../../assets/logo.svg';
 
 class Composer extends Component {
-  state = { composer: '', audience: 'public' };
+  state = { content: '', audience: 'public' };
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -17,9 +19,9 @@ class Composer extends Component {
     e.preventDefault();
 
     const self = this;
-    const { id, value } = e.target;
+    const { id, value = '' } = e.target;
 
-    self.setState({ [id]: value, });
+    self.setState({ [id]: value.trim(), });
   }
 
   handleAudience = (value) => this.setState({ audience: value, });
@@ -52,12 +54,17 @@ class Composer extends Component {
             actions={self.renderControls(self.state.audience)}
           >
             <TextArea
-              id="composer"
+              id="content"
               name="composer"
               placeholder={`What's on your mind, ${user}?`}
-              value={self.state.composer}
               onChange={self.handleChange}
-            />
+              className="ant-input"
+              data-placeholder={ `What's on your mind, ${this.props.user}?`}
+              contentEditable
+              suppressContentEditableWarning
+            >
+              {self.state.content}
+            </TextArea>
           </Card>
         </FormItem>
       </Form>

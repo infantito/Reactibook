@@ -1,6 +1,6 @@
 import React from 'react';
 import Empty from 'antd/es/empty';
 
-const NoMatch = () => <Empty>404</Empty>;
+const NoMatch = ({ text = '404' }) => <Empty>{text}</Empty>;
 
 export default NoMatch;
