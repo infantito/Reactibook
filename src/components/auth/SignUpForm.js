@@ -29,9 +29,9 @@ class SignUpForm extends Component {
 
   handleChange = (e) => {
     const self = this;
-    const { name, value } = e.target;
+    const { name, value = '', } = e.target;
 
-    self.setState({ ...self.state, [name]: value })
+    self.setState({ ...self.state, [name]: value.trim(), })
   }
 
   hasErrors = (fieldsError) =>
@@ -91,8 +91,11 @@ class SignUpForm extends Component {
             {
               getFieldDecorator('password', {
                 initialValue: password,
-                rules: [{ required: true, message: 'Please input your password!' }],
-                whitespace: false,
+                rules: [{
+                  required: true,
+                  message: 'Please input your password!',
+                  whitespace: true,
+                }],
               })(
                 <Input
                   prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -114,10 +117,11 @@ class SignUpForm extends Component {
             {
               getFieldDecorator('firstName', {
                 initialValue: firstName,
-                rules: [
-                  { required: true, message: 'Please input your first name!', },
-                ],
-                whitespace: false,
+                rules: [{
+                  required: true,
+                  message: 'Please input your first name!',
+                  whitespace: true,
+                }],
               })(
                 <Input
                   prefix={<Icon type="solution" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -139,8 +143,11 @@ class SignUpForm extends Component {
             {
               getFieldDecorator('lastName', {
                 initialValue: lastName,
-                rules: [{ required: true, message: 'Please input your last name!' }],
-                whitespace: false,
+                rules: [{
+                  required: true,
+                  message: 'Please input your last name!',
+                  whitespace: true,
+                }],
               })(
                 <Input
                   prefix={<Icon type="solution" style={{ color: 'rgba(0,0,0,.25)' }} />}

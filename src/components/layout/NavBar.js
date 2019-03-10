@@ -8,7 +8,7 @@ import MenuItem from 'antd/es/menu/MenuItem';
 
 import Logo from './Logo';
 import { signOut } from '../../store/actions/authActions';
-import { signInPath, feedPath, signOutPath, signUpPath } from '../../routes/paths';
+import { signInPath, feedPath, homePath, signUpPath } from '../../routes/paths';
 
 const NavBarBox = styled.div`
   display: flex;
@@ -19,7 +19,7 @@ const NavBarBox = styled.div`
 const NavBar = (props) => {
   const paths = props.auth.uid ? [
     { name: 'Feed', path: feedPath },
-    { name: 'Sign Out', path: signOutPath, onClick: props.signOut }
+    { name: 'Sign Out', path: homePath, onClick: props.signOut }
   ] : [
     { name: 'Sign In', path: signInPath },
     { name: 'Sign Up', path: signUpPath }

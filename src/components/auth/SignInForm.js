@@ -31,15 +31,14 @@ class SignInForm extends Component {
 
   handleChange = (e) => {
     const self = this;
-    const { name, value } = e.target;
+    const { name, value = '', } = e.target;
 
-    self.setState({ ...self.state, [name]: value })
+    self.setState({ ...self.state, [name]: value.trim(), })
   }
 
-  hasErrors = (fieldsError) =>
-    Object
-      .keys(fieldsError)
-      .some(field => fieldsError[field]);
+  hasErrors = (fieldsError) => Object
+    .keys(fieldsError)
+    .some(field => fieldsError[field]);
 
   render() {
     const self = this;
@@ -91,8 +90,7 @@ class SignInForm extends Component {
             {
               getFieldDecorator('password', {
                 initialValue: password,
-                rules: [{ required: true, message: 'Please input your password!' }],
-                whitespace: false,
+                rules: [{ required: true, message: 'Please input your password!', whitespace: true, }],
               })(
                 <Input
                   prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
