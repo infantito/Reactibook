@@ -18,7 +18,7 @@ const Routes = ({ location }) => {
   return (
     <Switch location={location}>
       <Route exact path={homePath} component={Home} />
-      <Route exact path={feedPath} component={Feed} />
+      <Route path={feedPath} component={Feed} />
       <Route path={signInPath} component={SignIn} />
       <Route path={signOutPath} component={Home} />
       <Route path={signUpPath} component={SignUp} />

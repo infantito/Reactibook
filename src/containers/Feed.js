@@ -1,5 +1,25 @@
-import React from 'react';
+import React, { Component } from 'react';
+import Divider from 'antd/es/divider';
 
-const Feed = () => <div>Feed</div>;
+import Row from 'antd/es/row';
+import Col from 'antd/es/col';
+import Composer from '../components/feeds/Composer';
+import AudiencePosts from '../components/feeds/AudiencePosts';
+
+class Feed extends Component {
+  state = { audience: 'all', }
+
+  render() {
+    return (
+      <Row type="flex" justify="center">
+        <Col span={12}>
+          <Composer />
+          <Divider>Posts</Divider>
+          <AudiencePosts />
+        </Col>
+      </Row>
+    );
+  }
+};
 
 export default Feed;

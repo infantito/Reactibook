@@ -2,10 +2,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 
 export const theme = {
   black: '#393939',
-  skyblue: '#128abc',
-  green: '#8fbe32',
-  bs: '0 12px 24px 0 rgba(0, 0, 0, 0.09)',
-  maxWidth: '1200px',
+  maxWidth: '1024px',
 }
 
 export const StyledPage = styled.div`
