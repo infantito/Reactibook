@@ -9,6 +9,8 @@ import rootReducer from './reducers/';
 
 const config = {
   userProfile: 'users',
+  useFirestoreForProfile: true,
+  attachAuthIsReady: true,
   enableLogging: false,
 };
 

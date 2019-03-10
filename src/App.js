@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import LoadingBar from 'react-redux-loading-bar';
 import { ConnectedRouter } from 'connected-react-router';
 import { Route } from 'react-router-dom';
 import Layout from 'antd/es/layout';
@@ -27,6 +28,7 @@ class App extends Component {
         <ThemeProvider theme={theme}>
           <StyledPage>
             <Layout>
+              <LoadingBar />
               <Header>
                 <InnerOnly>
                   <NavBar logo={logo} />
