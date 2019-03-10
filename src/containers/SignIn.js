@@ -1,22 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
 
 import UserForm from '../components/auth/SignInForm';
-import { signUpPath } from '../routes/paths';
+import { signUpPath, feedPath } from '../routes/paths';
 
 const SignIn = (props) => {
-  const handleSubmit = (childProps) => {
-    console.log(childProps);
-  };
+  const { auth } = props;
+
+  if (auth.uid) {
+    return <Redirect to={feedPath} />;
+  }
 
   return (
     <>
       <Row type="flex" justify="center">
         <Col span={12}>
-          <UserForm title="Sign In" button="Sign In" onSubmit={handleSubmit} />
+          <UserForm title="Sign In" button="Sign In"/>
         </Col>
       </Row>
       <Row type="flex" justify="center">
@@ -28,4 +30,8 @@ const SignIn = (props) => {
   );
 };
 
-export default connect()(SignIn);
+const mapStateToProps = ({ firebase, firestore }) => ({
+  auth: firebase.auth,
+});
+
+export default connect(mapStateToProps)(SignIn);

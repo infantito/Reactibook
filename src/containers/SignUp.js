@@ -1,11 +1,19 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import Row from 'antd/es/row';
 import Col from 'antd/es/col';
 
 import UserForm from '../components/auth/SignUpForm';
+import { feedPath } from '../routes/paths';
 
+const SignUp = (props) => {
+  const { auth } = props;
 
-const SignUp = () => {
+  if (auth.uid) {
+    return <Redirect to={feedPath} />;
+  }
+
   return (
     <>
       <Row type="flex" justify="center">
@@ -17,5 +25,8 @@ const SignUp = () => {
   );
 };
 
+const mapStateToProps = ({ firebase, firestore }) => ({
+  auth: firebase.auth,
+});
 
-export default SignUp;
+export default connect(mapStateToProps)(SignUp);
