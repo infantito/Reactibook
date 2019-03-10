@@ -1,0 +1,61 @@
+import styled, { createGlobalStyle } from 'styled-components';
+
+export const theme = {
+  black: '#393939',
+  skyblue: '#128abc',
+  green: '#8fbe32',
+  bs: '0 12px 24px 0 rgba(0, 0, 0, 0.09)',
+  maxWidth: '1200px',
+}
+
+export const StyledPage = styled.div`
+  background-color: #fff;
+  color: ${props => props.theme.black};
+`;
+
+export const Inner = styled.div`
+  max-width: ${props => props.theme.maxWidth};
+  margin: 0 auto;
+  padding: 2rem;
+`;
+
+export const InnerOnly = styled.div`
+  max-width: ${props => props.theme.maxWidth};
+  margin: 0 auto;
+`;
+
+export const InnerFooter = styled.div`
+  max-width: ${props => props.theme.maxWidth};
+  margin: 0 auto;
+  text-align: center;
+`;
+
+export const GlobalStyle = createGlobalStyle`
+  html {
+    box-sizing: border-box;
+    font-size: 10px;
+  }
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 2;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+      "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  a {
+    text-decoration: none;
+    color: ${theme.green};
+  }
+  button {  font-family: 'radnika_next'; }
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+      monospace;
+  }
+`;

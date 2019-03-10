@@ -7,6 +7,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import configureStore from './states/configureStore';
 import { homePath } from './routes/paths';
+import 'antd/dist/antd.css';
 
 const rootElement = document.getElementById('root');
 
