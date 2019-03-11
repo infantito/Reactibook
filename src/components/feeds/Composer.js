@@ -49,15 +49,21 @@ class Composer extends Component {
   removeImages = (parent, images) =>
     images.forEach((img) => parent.removeChild(img))
 
-  handleChange = (e) => {
+  handleImages = (composer) => {
     const self = this;
-    const composer = self.composer.current;
     const images = composer.querySelectorAll('img');
 
     if (images.length > self.keepping) {
       const pictures = [...images].slice(0, images.length - self.keepping);
       self.removeImages(composer, pictures);
     }
+  }
+
+  handleChange = (e) => {
+    const self = this;
+    const composer = self.composer.current;
+
+    self.handleImages(composer)
   }
 
   uploadImage = async (file) => {
@@ -83,11 +89,13 @@ class Composer extends Component {
     img.alt = 'reactibook';
     img.src = url;
 
-    self.setState({ disabled: false });
-    composer.innerHTML += img.outerHTML;
-    composer.focus();
 
-    Message.success('Well done!');
+    self.setState({ disabled: false }, () => {
+      composer.innerHTML += img.outerHTML;
+      self.handleImages(composer);
+      composer.focus();
+      Message.success('Well done!');
+    });
   }
 
   handleUpload = (file, fileList) => {

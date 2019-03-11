@@ -13,15 +13,6 @@ import { signInPath } from '../../routes/paths';
 class AudiencePosts extends Component {
   state = { posts: this.props.posts, };
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const self = this;
-    const { state } = self;
-
-    return (
-      nextState.posts !== state.posts
-    );
-  }
-
   handleFilter = (e) => {
     const self = this;
     const { name } = e.target;
