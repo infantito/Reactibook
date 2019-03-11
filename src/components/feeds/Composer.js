@@ -11,6 +11,7 @@ import Message from 'antd/es/message';
 
 import TextArea from './TextArea';
 import { createPost } from '../../store/actions/postsActions';
+import { cloudinary } from '../../utils/constants/Database';
 
 class Composer extends Component {
   constructor(props) {
@@ -36,6 +37,7 @@ class Composer extends Component {
       return null;
     }
 
+    composer.textContent = '';
     props.createPost({ ...state, content, });
   }
 
@@ -53,6 +55,35 @@ class Composer extends Component {
     }
   }
 
+  uploadImage = async (file) => {
+    const data = new FormData();
+    data.append('file', file);
+    /* config for cloudinary */
+    data.append('upload_preset', 'sickfits');
+
+    const response =
+      await fetch(cloudinary, {
+        method: 'POST',
+        body: data,
+      });
+    const cloud = await response.json();
+
+    return cloud.secure_url;
+  }
+
+  resolveHTML = (url) => {
+    const self = this;
+    const composer = self.composer.current;
+    const img = document.createElement('img');
+    img.alt = 'reactibook';
+    img.src = url;
+
+    composer.innerHTML += img.outerHTML;
+    composer.focus();
+
+    Message.success('Well done!');
+  }
+
   handleUpload = (file, fileList) => {
     const self = this;
     const { mimes, maxFileSize } = self;
@@ -62,7 +93,7 @@ class Composer extends Component {
       if (size > maxFileSize) {
         Message.error('Image must smaller than 1MB!');
       } else {
-        Message.success('Well done!');
+        self.uploadImage(file).then(self.resolveHTML);
       }
     } else {
       Message.error('You can only upload JPG or PNG file!');
