@@ -11,26 +11,29 @@ import NoMatch from '../common/NoMatch';
 import { signInPath } from '../../routes/paths';
 
 class AudiencePosts extends Component {
-  state = { posts: this.props.posts, core: false, };
+  state = { audience: '', };
 
-  static getDerivedStateFromProps(props, state) {
-    return { posts: state.core ? state.posts : props.posts, core: false, };
+  getPosts = () => {
+    const self = this;
+
+    const { audience: name } = self.state;
+    const { posts } = self.props;
+    const filtered = posts.filter(({ audience }) => name ? audience === name : audience);
+
+    return filtered;
   }
 
   handleFilter = (e) => {
     const self = this;
     const { name } = e.target;
-    const { posts } = self.props;
 
-    const filtered = posts.filter(({ audience }) => audience === name);
-
-    self.setState({ posts: filtered, core: true, });
+    self.setState({ audience: name, });
   }
 
   render() {
     const self = this;
     const { auth } = self.props;
-    const { posts } = self.state;
+    const posts = self.getPosts();
 
     if (!auth.uid) {
       return <Redirect to={signInPath} />;
