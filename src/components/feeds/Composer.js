@@ -1,49 +1,81 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Button from 'antd/es/button';
 import Card from 'antd/es/card';
 import Form from 'antd/es/form';
 import FormItem from 'antd/es/form/FormItem';
+import Icon from 'antd/es/icon';
 import Select from 'antd/es/select';
+import Upload from 'antd/es/upload';
+import Message from 'antd/es/message';
 
 import TextArea from './TextArea';
-// import logo from '../../assets/logo.svg';
+import { createPost } from '../../store/actions/postsActions';
 
 class Composer extends Component {
-  state = { content: '', audience: 'public' };
+  constructor(props) {
+    super(props);
+
+    this.state = { audience: 'public', };
+    this.composer = React.createRef();
+    this.keepping = 1;
+    this.mimes = ['image/jpeg', 'image/jpg', 'image/png'];
+    this.maxFileSize = 1000000;
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
-  }
-
-  handleChange = (e) => {
-    e.preventDefault();
 
     const self = this;
-    const { id, value = '' } = e.target;
+    const { props, state } = self;
+    const composer = self.composer.current;
+    const content = composer.innerHTML.trim();
 
-    self.setState({ [id]: value.trim(), });
+    if (!content) {
+      composer.focus();
+      return null;
+    }
+
+    props.createPost({ ...state, content, });
+  }
+
+  removeImages = (parent, images) =>
+    images.forEach((img) => parent.removeChild(img))
+
+  handleChange = (e) => {
+    const self = this;
+    const composer = self.composer.current;
+    const images = composer.querySelectorAll('img');
+
+    if (images.length > self.keepping) {
+      const pictures = [...images].slice(0, images.length - self.keepping);
+      self.removeImages(composer, pictures);
+    }
+  }
+
+  handleUpload = (file, fileList) => {
+    const self = this;
+    const { mimes, maxFileSize } = self;
+    const { size, type } = file;
+
+    if (mimes.includes(type)) {
+      if (size > maxFileSize) {
+        Message.error('Image must smaller than 1MB!');
+      } else {
+        Message.success('Well done!');
+      }
+    } else {
+      Message.error('You can only upload JPG or PNG file!');
+    }
+
+    return false;
   }
 
   handleAudience = (value) => this.setState({ audience: value, });
 
-  renderControls = (audience) => (
-    [
-      <Select id="audience" defaultValue={audience} onChange={this.handleAudience}>
-        <Select.Option value="friends">Friends</Select.Option>
-        <Select.Option value="public">Public</Select.Option>
-      </Select>,
-      <Button
-        type="primary"
-        htmlType="submit"
-      >
-        Post
-      </Button>
-    ]
-  );
-
   render() {
     const self = this;
-    const { user, title } = self.props;
+    const { profile, title } = self.props;
 
     return (
       <Form layout="vertical" onSubmit={self.handleSubmit}>
@@ -51,20 +83,42 @@ class Composer extends Component {
           <Card
             size="small"
             title={title}
-            actions={self.renderControls(self.state.audience)}
+            actions={
+              [
+                <Upload
+                  fileList={[]}
+                  accept=".jpeg,.jpg,.png"
+                  beforeUpload={self.handleUpload}
+                >
+                  <Button>
+                    <Icon type="upload" /> Click to Upload
+                  </Button>
+                </Upload>,
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  onClick={self.handleSubmit}
+                >
+                  Post
+                </Button>,
+                <Select id="audience" defaultValue={self.state.audience} onChange={this.handleAudience}>
+                  <Select.Option value="friends">Friends</Select.Option>
+                  <Select.Option value="public">Public</Select.Option>
+                </Select>,
+              ]
+            }
           >
             <TextArea
               id="content"
               name="composer"
-              placeholder={`What's on your mind, ${user}?`}
-              onChange={self.handleChange}
+              placeholder={`What's on your mind, ${profile.firstName}?`}
+              onInput={self.handleChange}
               className="ant-input"
               data-placeholder={ `What's on your mind, ${this.props.user}?`}
               contentEditable
               suppressContentEditableWarning
-            >
-              {self.state.content}
-            </TextArea>
+              ref={self.composer}
+            />
           </Card>
         </FormItem>
       </Form>
@@ -72,4 +126,10 @@ class Composer extends Component {
   }
 }
 
-export default Composer;
+const mapDispatchToProps = dispatch => {
+  return {
+    createPost: (post) => dispatch(createPost(post))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Composer);

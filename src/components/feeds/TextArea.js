@@ -9,6 +9,9 @@ const TextArea = styled.div`
     color: grey;
     display: inline-block;
   }
+  &.isBlank {
+    border: 1px solid red;
+  }
 `;
 
 export default TextArea;

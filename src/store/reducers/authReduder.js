@@ -1,3 +1,5 @@
+import Message from 'antd/es/message';
+
 import { Auth } from '../../utils/constants/Actions';
 
 const initState = {
@@ -9,13 +11,15 @@ const authReducer = (state = initState, action) => {
     case Auth.SIGN_IN_SUCCESS:
       return {...state, authError: null};
     case Auth.SIGN_IN_ERROR:
-      return {...state, authError: 'SignIn Failed'};
+      Message.error(action.error);
+      return {...state, authError: action.error};
     case Auth.SIGN_OUT_SUCCESS:
       return state;
     case Auth.SIGN_UP_SUCCESS:
       return {...state, authError: null};
     case Auth.SIGN_UP_ERROR:
-      return {...state, authError: 'SignUp Failed'};
+      Message.error(action.error);
+      return {...state, authError: action.error};
     default:
       return state;
   }

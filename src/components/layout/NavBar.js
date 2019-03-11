@@ -16,10 +16,11 @@ const NavBarBox = styled.div`
   align-items: center;
 `;
 
-const NavBar = (props) => {
-  const paths = props.auth.uid ? [
+const NavBar = ({ logo, auth, profile, signOut: logOut }) => {
+  const paths = auth.uid ? [
     { name: 'Feed', path: feedPath },
-    { name: 'Sign Out', path: homePath, onClick: props.signOut }
+    { name: 'Sign Out', path: homePath, onClick: logOut },
+    // { name: profile.initials, path: homePath }
   ] : [
     { name: 'Sign In', path: signInPath },
     { name: 'Sign Up', path: signUpPath }
@@ -27,7 +28,7 @@ const NavBar = (props) => {
 
   return (
     <NavBarBox>
-      <Logo image={props.logo} />
+      <Logo image={logo} />
       <Menu mode="horizontal" theme="dark">
         {
           paths.map(({ name, path, onClick }, key) => (
@@ -42,7 +43,14 @@ const NavBar = (props) => {
   );
 }
 
-const mapStateToProps = ({ firebase }) => ({ auth: firebase.auth, });
+const mapStateToProps = (state) => {
+  const { firebase } = state;
+
+  return {
+    auth: firebase.auth,
+    profile: firebase.profile,
+  };
+}
 
 const mapDispatchToProps = (dispatch) =>
   ({ signOut: () => dispatch(signOut()) });

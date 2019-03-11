@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase'
+import { Redirect } from 'react-router-dom'
+import { compose } from 'redux'
 
 import Filter from './Filter';
 import Post from './Post';
@@ -15,7 +19,11 @@ class AudiencePosts extends Component {
 
   render() {
     const self = this;
-    const { posts } = self.state;
+    const { posts, auth } = self.props;
+
+    if (!auth.uid) {
+      return <Redirect to='/signin' />;
+    }
 
     return (
       <>
@@ -33,4 +41,16 @@ class AudiencePosts extends Component {
   }
 }
 
-export default AudiencePosts;
+const mapStateToProps = ({ firebase, firestore }) => {
+  return {
+    posts: firestore.ordered.posts || [],
+    auth: firebase.auth,
+  };
+}
+
+export default compose(
+  connect(mapStateToProps),
+  firestoreConnect([
+    { collection: 'posts', orderBy: ['createdAt', 'desc'] },
+  ]),
+)(AudiencePosts);

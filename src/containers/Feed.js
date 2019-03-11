@@ -25,7 +25,7 @@ class Feed extends Component {
     return (
       <Row type="flex" justify="center">
         <Col span={12}>
-          <Composer />
+          <Composer profile={auth} />
           <Divider>Posts</Divider>
           <AudiencePosts posts={posts} />
         </Col>

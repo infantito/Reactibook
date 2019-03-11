@@ -9,12 +9,9 @@ import Button from 'antd/es/button';
 import Typography from 'antd/es/typography';
 import Title from 'antd/es/typography/Title';
 
-import ErrorMessage from '../../components/common/ErrorMessage';
 import { signIn } from '../../store/actions/authActions';
 
 class SignInForm extends Component {
-  state = { email: '', password: '', };
-
   componentDidMount() {
     // To disabled submit button at the beginning.
     this.props.form.validateFields();
@@ -24,17 +21,14 @@ class SignInForm extends Component {
     e.preventDefault();
 
     const self = this;
-    const { props, state } = self;
+    const { props } = self;
 
-    props.signIn(state, props.history);
+    props.form.validateFields((error, values) => {
+      if (!error) {
+        props.signIn(values, props.history);
+      }
+    });
   };
-
-  handleChange = (e) => {
-    const self = this;
-    const { name, value = '', } = e.target;
-
-    self.setState({ ...self.state, [name]: value.trim(), })
-  }
 
   hasErrors = (fieldsError) => Object
     .keys(fieldsError)
@@ -42,9 +36,8 @@ class SignInForm extends Component {
 
   render() {
     const self = this;
-    const { title, button, authError } = self.props;
+    const { title, button } = self.props;
 
-    const { email, password, } = self.state;
     const {
       getFieldDecorator, getFieldsError, getFieldError, isFieldTouched,
     } = self.props.form;
@@ -65,7 +58,6 @@ class SignInForm extends Component {
           >
             {
               getFieldDecorator('email', {
-                initialValue: email,
                 rules: [
                   { type: 'email', message: 'The input is not valid E-mail!', },
                   { required: true, message: 'Please input your email!' },
@@ -76,7 +68,6 @@ class SignInForm extends Component {
                   id="email"
                   name="email"
                   placeholder="Email"
-                  onChange={self.handleChange}
                   autoComplete="false"
                 />
               )
@@ -89,7 +80,6 @@ class SignInForm extends Component {
           >
             {
               getFieldDecorator('password', {
-                initialValue: password,
                 rules: [{ required: true, message: 'Please input your password!', whitespace: true, }],
               })(
                 <Input
@@ -98,7 +88,6 @@ class SignInForm extends Component {
                   name="password"
                   type="password"
                   placeholder="Password"
-                  onChange={self.handleChange}
                   autoComplete="false"
                 />
               )
@@ -113,16 +102,16 @@ class SignInForm extends Component {
               {button}
             </Button>
           </FormItem>
-          <FormItem>
-            <ErrorMessage error={authError} />
-          </FormItem>
         </Form>
       </>
     );
   }
 }
+const mapStateToProps = (state) => {
+  const { authError } = state.auth;
 
-const mapStateToProps = (state) => ({ authError: state.auth.authError });
+  return { authError, };
+};
 
 const mapDispatchToProps = (dispatch) =>
   ({ signIn: (user, history) => dispatch(signIn(user, history)), });
