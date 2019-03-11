@@ -8,6 +8,8 @@ import Filter from './Filter';
 import Post from './Post';
 import NoMatch from '../common/NoMatch';
 
+import { signInPath } from '../../routes/paths';
+
 class AudiencePosts extends Component {
   state = { posts: this.props.posts, };
 
@@ -36,7 +38,7 @@ class AudiencePosts extends Component {
     const { posts } = self.state;
 
     if (!auth.uid) {
-      return <Redirect to='/signin' />;
+      return <Redirect to={signInPath} />;
     }
 
     return (

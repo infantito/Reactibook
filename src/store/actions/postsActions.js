@@ -7,13 +7,13 @@ export const createPost = (post) => {
     dispatch(showLoading());
     // make async call to database
     const firestore = getFirestore();
-    const { firebase: { auth } } = getState();
+    const { firebase: { auth, profile = {}, } } = getState();
 
     return firestore
       .collection('posts')
       .add({
         ...post,
-        owner: auth.email,
+        owner: `${profile.firstName} ${profile.lastName}`,
         userId: auth.uid,
         createdAt: new Date(),
       })

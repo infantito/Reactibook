@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import Card from 'antd/es/card';
 import Icon from 'antd/es/icon';
 import Skeleton from 'antd/es/skeleton';
@@ -31,12 +32,15 @@ class Post extends Component {
   render() {
     const self = this;
     const { props } = self;
-    const { post } = props;
+    const { post  } = props;
+    const name = post.owner;
+    const date = moment(post.createdAt.toDate()).calendar();
+    const title = `${name} - ${date}`;
 
     return (
       <Card
         size="small"
-        title={(post.createdAt || new Date()).toString()}
+        title={title}
         actions={
           [
             <Icon type="edit" />,

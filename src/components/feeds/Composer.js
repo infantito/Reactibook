@@ -131,7 +131,7 @@ class Composer extends Component {
                     beforeUpload={self.handleUpload}
                   >
                     <Button>
-                      <Icon type="upload" /> Click to Upload
+                      <Icon type="upload" /> Upload Image
                     </Button>
                   </Upload>,
                   <Button
@@ -153,7 +153,7 @@ class Composer extends Component {
                 name="composer"
                 onInput={self.handleChange}
                 className="ant-input"
-                data-placeholder={ `What's on your mind, ${profile.email}?`}
+                data-placeholder={ `What's on your mind, ${profile.firstName}?`}
                 contentEditable
                 suppressContentEditableWarning
                 ref={self.composer}

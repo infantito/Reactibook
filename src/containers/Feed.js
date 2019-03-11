@@ -12,11 +12,17 @@ import AudiencePosts from '../components/feeds/AudiencePosts';
 import { signInPath } from '../routes/paths';
 
 class Feed extends Component {
-  state = { audience: 'all', }
+  constructor(props) {
+    super(props);
+
+    this.state = { audience: 'all', }
+    this.defaultProfile = { firstName: 'Anonymous', lastName: 'JS' };
+  }
 
   render() {
-    const { props } = this;
-    const { posts, auth } = props;
+    const self = this;
+    const { props } = self;
+    const { posts, auth, profile } = props;
 
     if (!auth.uid) {
       return <Redirect to={signInPath} />;
@@ -25,10 +31,16 @@ class Feed extends Component {
     return (
       <Row type="flex" justify="center">
         <Col span={12}>
-          <Composer profile={auth} />
+          <Composer profile={profile || self.defaultProfile} />
           <Divider>Posts</Divider>
           {
-            posts && <AudiencePosts posts={posts} auth={auth} />
+            posts
+            &&
+            <AudiencePosts
+              posts={posts}
+              auth={auth}
+              profile={profile}
+            />
           }
         </Col>
       </Row>
@@ -36,10 +48,13 @@ class Feed extends Component {
   }
 };
 
-const mapStateToProps = ({ firebase, firestore }) => ({
-  posts: firestore.ordered.posts,
-  auth: firebase.auth,
-});
+const mapStateToProps = ({ firebase, firestore }) => {
+  return {
+    posts: firestore.ordered.posts,
+    auth: firebase.auth,
+    profile: firebase.profile,
+  };
+};
 
 export default compose(
   connect(mapStateToProps),
