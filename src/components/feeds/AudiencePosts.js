@@ -1,25 +1,39 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { firestoreConnect } from 'react-redux-firebase'
-import { Redirect } from 'react-router-dom'
-import { compose } from 'redux'
+import React, { Component, Fragment } from 'react';
+// import { connect } from 'react-redux';
+// import { firestoreConnect } from 'react-redux-firebase';
+import { Redirect } from 'react-router-dom';
+// import { compose } from 'redux';
 
 import Filter from './Filter';
 import Post from './Post';
 import NoMatch from '../common/NoMatch';
 
 class AudiencePosts extends Component {
-  state = { posts: [] }
+  state = { posts: this.props.posts, };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const self = this;
+    const { state } = self;
+
+    return (
+      nextState.posts !== state.posts
+    );
+  }
 
   handleFilter = (e) => {
     const self = this;
+    const { name } = e.target;
+    const { posts } = self.props;
 
-    self.setState({ posts: [], });
+    const filtered = posts.filter(({ audience }) => audience === name);
+
+    self.setState({ posts: filtered, });
   }
 
   render() {
     const self = this;
-    const { posts, auth } = self.props;
+    const { auth } = self.props;
+    const { posts } = self.state;
 
     if (!auth.uid) {
       return <Redirect to='/signin' />;
@@ -32,7 +46,12 @@ class AudiencePosts extends Component {
         {
           posts.length
           ?
-          posts.map((post, index) => <Post key={index} />)
+          posts.map((post, index) => (
+            <Fragment key={index}>
+              <Post post={post} />
+              <br />
+            </Fragment>
+          ))
           :
           <NoMatch text="" />
         }
@@ -41,16 +60,5 @@ class AudiencePosts extends Component {
   }
 }
 
-const mapStateToProps = ({ firebase, firestore }) => {
-  return {
-    posts: firestore.ordered.posts || [],
-    auth: firebase.auth,
-  };
-}
 
-export default compose(
-  connect(mapStateToProps),
-  firestoreConnect([
-    { collection: 'posts', orderBy: ['createdAt', 'desc'] },
-  ]),
-)(AudiencePosts);
+export default AudiencePosts;

@@ -27,7 +27,9 @@ class Feed extends Component {
         <Col span={12}>
           <Composer profile={auth} />
           <Divider>Posts</Divider>
-          <AudiencePosts posts={posts} />
+          {
+            posts && <AudiencePosts posts={posts} auth={auth} />
+          }
         </Col>
       </Row>
     );
@@ -42,6 +44,6 @@ const mapStateToProps = ({ firebase, firestore }) => ({
 export default compose(
   connect(mapStateToProps),
   firestoreConnect([
-    { collection: 'posts' },
+    { collection: 'posts', orderBy: ['createdAt', 'desc'] },
   ]),
 )(Feed);

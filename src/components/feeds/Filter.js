@@ -14,7 +14,7 @@ const Filter = ({ onClick }) => (
     <Button
       onClick={onClick}
       id="friends"
-      name="filter"
+      name="friends"
       type="primary"
       icon="team"
     >
@@ -24,7 +24,7 @@ const Filter = ({ onClick }) => (
     <Button
       onClick={onClick}
       id="public"
-      name="filter"
+      name="public"
       type="primary"
       icon="global"
     >

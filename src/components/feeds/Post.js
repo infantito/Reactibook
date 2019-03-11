@@ -2,28 +2,41 @@ import React, { Component } from 'react';
 import Card from 'antd/es/card';
 import Icon from 'antd/es/icon';
 import Skeleton from 'antd/es/skeleton';
-import TextArea from 'antd/es/input/TextArea';
+
+import TextArea from './TextArea';
 
 class Post extends Component {
-  state = { current: '', persist: '', disabled: true, loading: true, }
+  constructor(props) {
+    super(props);
 
-  handleChange = (e) => {
-    console.log(e);
+    this.state = {
+      current: props.content,
+      persist: props.content,
+      disabled: true,
+      loading: true,
+    };
+    this.composer = React.createRef();
+  }
+
+  componentDidMount() {
+    this.setState({ loading: false, })
   }
 
   handleEdit = (e) => {
     console.log(e);
   }
 
+  markup = (html) => ({ __html: html });
+
   render() {
     const self = this;
     const { props } = self;
-    const { user, title } = props;
+    const { post } = props;
 
     return (
       <Card
         size="small"
-        title={title}
+        title={(post.createdAt || new Date()).toString()}
         actions={
           [
             <Icon type="edit" />,
@@ -33,12 +46,13 @@ class Post extends Component {
       >
         <Skeleton loading={self.state.loading} avatar active>
           <TextArea
-            id="composer"
             name="composer"
-            placeholder={`What's on your mind, ${user}?`}
-            value={self.state.current}
-            onChange={self.handleChange}
-            disabled={self.state.disabled}
+            className="ant-input"
+            contentEditable
+            suppressContentEditableWarning
+            ref={self.composer}
+            dangerouslySetInnerHTML={self.markup(post.content)}
+            readonly={self.state.disabled}
           />
         </Skeleton>
       </Card>

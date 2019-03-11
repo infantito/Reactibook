@@ -6,6 +6,7 @@ import Form from 'antd/es/form';
 import FormItem from 'antd/es/form/FormItem';
 import Icon from 'antd/es/icon';
 import Select from 'antd/es/select';
+import Spin from 'antd/es/spin';
 import Upload from 'antd/es/upload';
 import Message from 'antd/es/message';
 
@@ -17,7 +18,7 @@ class Composer extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { audience: 'public', };
+    this.state = { audience: 'public', disabled: false, };
     this.composer = React.createRef();
     this.keepping = 1;
     this.mimes = ['image/jpeg', 'image/jpg', 'image/png'];
@@ -34,11 +35,15 @@ class Composer extends Component {
 
     if (!content) {
       composer.focus();
+      Message.warning('Your post is empty!');
       return null;
     }
 
+    const post = { ...state };
+    delete post.disabled;
+
     composer.textContent = '';
-    props.createPost({ ...state, content, });
+    props.createPost({ ...post, content, });
   }
 
   removeImages = (parent, images) =>
@@ -78,6 +83,7 @@ class Composer extends Component {
     img.alt = 'reactibook';
     img.src = url;
 
+    self.setState({ disabled: false });
     composer.innerHTML += img.outerHTML;
     composer.focus();
 
@@ -93,6 +99,7 @@ class Composer extends Component {
       if (size > maxFileSize) {
         Message.error('Image must smaller than 1MB!');
       } else {
+        self.setState(({ disabled: true }));
         self.uploadImage(file).then(self.resolveHTML);
       }
     } else {
@@ -107,50 +114,53 @@ class Composer extends Component {
   render() {
     const self = this;
     const { profile, title } = self.props;
+    const { audience, disabled } = self.state;
 
     return (
       <Form layout="vertical" onSubmit={self.handleSubmit}>
         <FormItem label="Create Post">
-          <Card
-            size="small"
-            title={title}
-            actions={
-              [
-                <Upload
-                  fileList={[]}
-                  accept=".jpeg,.jpg,.png"
-                  beforeUpload={self.handleUpload}
-                >
-                  <Button>
-                    <Icon type="upload" /> Click to Upload
-                  </Button>
-                </Upload>,
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={self.handleSubmit}
-                >
-                  Post
-                </Button>,
-                <Select id="audience" defaultValue={self.state.audience} onChange={this.handleAudience}>
-                  <Select.Option value="friends">Friends</Select.Option>
-                  <Select.Option value="public">Public</Select.Option>
-                </Select>,
-              ]
-            }
-          >
-            <TextArea
-              id="content"
-              name="composer"
-              placeholder={`What's on your mind, ${profile.firstName}?`}
-              onInput={self.handleChange}
-              className="ant-input"
-              data-placeholder={ `What's on your mind, ${this.props.user}?`}
-              contentEditable
-              suppressContentEditableWarning
-              ref={self.composer}
-            />
-          </Card>
+          <Spin spinning={disabled} tip="...Reactibooking">
+            <Card
+              size="small"
+              title={title}
+              actions={
+                [
+                  <Upload
+                    fileList={[]}
+                    accept=".jpeg,.jpg,.png"
+                    beforeUpload={self.handleUpload}
+                  >
+                    <Button>
+                      <Icon type="upload" /> Click to Upload
+                    </Button>
+                  </Upload>,
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={self.handleSubmit}
+                  >
+                    Post
+                  </Button>,
+                  <Select id="audience" defaultValue={audience} onChange={self.handleAudience}>
+                    <Select.Option value="friends">Friends</Select.Option>
+                    <Select.Option value="public">Public</Select.Option>
+                  </Select>,
+                ]
+              }
+            >
+              <TextArea
+                id="content"
+                name="composer"
+                onInput={self.handleChange}
+                className="ant-input"
+                data-placeholder={ `What's on your mind, ${profile.email}?`}
+                contentEditable
+                suppressContentEditableWarning
+                ref={self.composer}
+                readonly={disabled}
+              />
+            </Card>
+          </Spin>
         </FormItem>
       </Form>
     );
