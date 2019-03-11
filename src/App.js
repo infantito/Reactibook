@@ -27,24 +27,22 @@ class App extends Component {
       <ConnectedRouter history={history}>
         <ThemeProvider theme={theme}>
           <StyledPage>
-            <Layout>
-              <LoadingBar />
-              <Header>
-                <InnerOnly>
-                  <NavBar logo={logo} />
-                </InnerOnly>
-              </Header>
-              <Content>
-                <Inner>
-                  <Route render={({ location }) => <Routes location={location} />} />
-                </Inner>
-              </Content>
-              <Footer>
-                <InnerFooter>
-                  &copy;Infantito Reactibook 2019
-                </InnerFooter>
-              </Footer>
-            </Layout>
+            <LoadingBar />
+            <Header>
+              <InnerOnly>
+                <NavBar logo={logo} />
+              </InnerOnly>
+            </Header>
+            <Content>
+              <Inner>
+                <Route render={({ location }) => <Routes location={location} />} />
+              </Inner>
+            </Content>
+            <Footer>
+              <InnerFooter>
+                &copy;Infantito Reactibook 2019
+              </InnerFooter>
+            </Footer>
             <GlobalStyle />
           </StyledPage>
         </ThemeProvider>

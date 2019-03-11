@@ -6,8 +6,11 @@ export const theme = {
 }
 
 export const StyledPage = styled.div`
-  background-color: #fff;
+  background-color: #f0f2f5;
   color: ${props => props.theme.black};
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 `;
 
 export const Inner = styled.div`

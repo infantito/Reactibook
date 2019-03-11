@@ -11,7 +11,11 @@ import NoMatch from '../common/NoMatch';
 import { signInPath } from '../../routes/paths';
 
 class AudiencePosts extends Component {
-  state = { posts: this.props.posts, };
+  state = { posts: this.props.posts, core: false, };
+
+  static getDerivedStateFromProps(props, state) {
+    return { posts: state.core ? state.posts : props.posts, core: false, };
+  }
 
   handleFilter = (e) => {
     const self = this;
@@ -20,7 +24,7 @@ class AudiencePosts extends Component {
 
     const filtered = posts.filter(({ audience }) => audience === name);
 
-    self.setState({ posts: filtered, });
+    self.setState({ posts: filtered, core: true, });
   }
 
   render() {
